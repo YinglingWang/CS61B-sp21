@@ -3,7 +3,7 @@ package IntList;
 public class IntListExercises {
 
     /**
-     * Part A: (Buggy) mutative method that adds a constant C to each
+     * Part A: mutative method that adds a constant C to each
      * element of an IntList
      *
      * @param lst IntList from Lecture
@@ -14,10 +14,11 @@ public class IntListExercises {
             head.first += c;
             head = head.rest;
         }
+        head.first += c;
     }
 
     /**
-     * Part B: Buggy method that sets node.first to zero if
+     * Part B: method that sets node.first to zero if
      * the max value in the list starting at node has the same
      * first and last digit, for every node in L
      *
@@ -51,15 +52,15 @@ public class IntListExercises {
      */
     public static boolean firstDigitEqualsLastDigit(int x) {
         int lastDigit = x % 10;
-        while (x > 10) {
+        while (x >= 10) {
             x = x / 10;
         }
-        int firstDigit = x % 10;
+        int firstDigit = x;
         return firstDigit == lastDigit;
     }
 
     /**
-     * Part C: (Buggy) mutative method that squares each prime
+     * Part C: mutative method that squares each prime
      * element of the IntList.
      *
      * @param lst IntList from Lecture
@@ -77,6 +78,8 @@ public class IntListExercises {
             lst.first *= lst.first;
         }
 
-        return currElemIsPrime || squarePrimes(lst.rest);
+       boolean restChanged = squarePrimes(lst.rest);
+
+        return currElemIsPrime || restChanged;
     }
 }
