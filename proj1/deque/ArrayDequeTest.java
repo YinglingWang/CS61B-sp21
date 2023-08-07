@@ -119,9 +119,9 @@ public class ArrayDequeTest {
         arrayDeque.addFirst(3);
         arrayDeque.addLast(4);
 
-        assertEquals(Optional.of(3), Optional.of(arrayDeque.get(0)));
-        assertEquals(Optional.of(4), Optional.of(arrayDeque.get(1)));
-        assertEquals(Optional.empty(), Optional.ofNullable(arrayDeque.get(2)));
+        assertEquals(Integer.valueOf(3), arrayDeque.get(0));
+        assertEquals(Integer.valueOf(4), arrayDeque.get(1));
+        assertNull(arrayDeque.get(2));
     }
 
     @Test

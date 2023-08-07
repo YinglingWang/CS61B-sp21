@@ -32,7 +32,7 @@ public class ArrayDeque<T> implements Iterable<T> {
     }
 
     /**
-     * Creates an empty linked array deque.
+     * Creates an empty array deque.
      */
     public ArrayDeque() {
         items = (T[]) new Object[8];

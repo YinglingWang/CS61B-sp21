@@ -120,9 +120,9 @@ public class LinkedListDequeTest {
         lld1.addFirst(3);
         lld1.addLast(4);
 
-        assertEquals(Optional.of(3), Optional.of(lld1.get(0)));
-        assertEquals(Optional.of(4), Optional.of(lld1.get(1)));
-        assertEquals(Optional.empty(), Optional.ofNullable(lld1.get(2)));
+        assertEquals(Integer.valueOf(3), lld1.get(0));
+        assertEquals(Integer.valueOf(4), lld1.get(1));
+        assertNull(lld1.get(2));
     }
 
     @Test
@@ -134,10 +134,10 @@ public class LinkedListDequeTest {
         lld1.addFirst(1);
         lld1.addLast(3);
 
-        assertEquals(Optional.of(1), Optional.of(lld1.getRecursive(0)));
-        assertEquals(Optional.of(2), Optional.of(lld1.getRecursive(1)));
-        assertEquals(Optional.of(3), Optional.of(lld1.getRecursive(2)));
-        assertEquals(Optional.empty(), Optional.ofNullable(lld1.get(3)));
+        assertEquals(Integer.valueOf(1), lld1.getRecursive(0));
+        assertEquals(Integer.valueOf(2), lld1.getRecursive(1));
+        assertEquals(Integer.valueOf(3), lld1.getRecursive(2));
+        assertNull(lld1.getRecursive(3));
     }
 
     @Test
