@@ -2,68 +2,67 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements  Iterable<T> {
-    private Node sentinel;
+public class ArrayDeque<T> implements Iterable<T> {
+    private T[] items;
     private int size;
+    private int nextFirst;
+    private int nextLast;
 
     @Override
     public Iterator<T> iterator() {
-        return new LinkedListIterator();
+        return new ArrayIterator();
     }
 
-    private class LinkedListIterator implements Iterator<T> {
-        Node currentNode = sentinel.next;
-
+    private class ArrayIterator implements Iterator<T> {
+        int index = moveRight(nextFirst);
         @Override
         public boolean hasNext() {
-            return size != 0 && currentNode != sentinel;
+            return size != 0 && index != nextLast;
         }
 
         @Override
         public T next() {
             if (hasNext()) {
-                T item = currentNode.item;
-                currentNode = currentNode.next;
+                T item = items[index];
+                index = moveRight(index);
                 return item;
             }
             return  null;
         }
     }
 
-    private class Node {
-        T item;
-        Node pre;
-        Node next;
-
-        Node(T item) {
-            this.item = item;
-        }
-
-        Node(T item, Node pre, Node next) {
-            this.item = item;
-            this.pre = pre;
-            this.next = next;
-        }
+    /**
+     * Creates an empty linked array deque.
+     */
+    public ArrayDeque() {
+        items = (T[]) new Object[8];
+        size = 0;
+        nextFirst = 7;
+        nextLast = 0;
     }
 
     /**
-     * Creates an empty linked list deque.
+     *  Resize the deque to the length of capacity.
      */
-    public LinkedListDeque() {
-        sentinel = new Node(null);
-        sentinel.pre = sentinel;
-        sentinel.next = sentinel;
-        size = 0;
+    private void resize(int capacity) {
+        T[] newItems = (T[]) new Object[capacity];
+        for (int i = 0; i < size; i ++) {
+            newItems[i] = items[(nextFirst + 1 + i) % items.length];
+        }
+        items = newItems;
+        nextFirst = capacity - 1;
+        nextLast = size;
     }
 
     /**
      * Adds an item of type T to the front of the deque. You can assume that item is never null.
      */
     public void addFirst(T item) {
-        Node currentFirst = sentinel.next;
-        Node newNode = new Node(item, sentinel, currentFirst);
-        sentinel.next = newNode;
-        currentFirst.pre = newNode;
+        if (size == items.length) {
+            resize(items.length * 4);
+        }
+        items[nextFirst] = item;
+        nextFirst = moveLeft(nextFirst);
         size += 1;
     }
 
@@ -71,10 +70,11 @@ public class LinkedListDeque<T> implements  Iterable<T> {
      * Adds an item of type T to the back of the deque. You can assume that item is never null.
      */
     public void addLast(T item) {
-        Node currentLast = sentinel.pre;
-        Node newNode = new Node(item, currentLast, sentinel);
-        sentinel.pre = newNode;
-        currentLast.next = newNode;
+        if (size == items.length) {
+            resize(items.length * 4);
+        }
+        items[nextLast] = item;
+        nextLast = moveRight(nextLast);
         size += 1;
     }
 
@@ -97,10 +97,10 @@ public class LinkedListDeque<T> implements  Iterable<T> {
      * print out a new line.
      */
     public void printDeque() {
-        Node currentNode = sentinel.next;
-        while (currentNode != sentinel) {
-            System.out.print(currentNode.item + " ");
-            currentNode = currentNode.next;
+        int index = moveRight(nextFirst);
+        for (int i = 0; i < size; i++) {
+            System.out.print(items[index] + " ");
+            index = moveRight(index);
         }
         System.out.println();
     }
@@ -112,11 +112,12 @@ public class LinkedListDeque<T> implements  Iterable<T> {
         if (size == 0) {
             return null;
         }
-        T firstItem = sentinel.next.item;
-        sentinel.next = sentinel.next.next;
-        sentinel.next.pre = sentinel;
+        if (items.length > 16 && items.length >= size * 4) {
+            resize(items.length / 4);
+        }
+        nextFirst = moveRight(nextFirst);
         size -= 1;
-        return firstItem;
+        return items[nextFirst];
     }
 
     /**
@@ -126,11 +127,12 @@ public class LinkedListDeque<T> implements  Iterable<T> {
         if (size == 0) {
             return null;
         }
-        T lastItem = sentinel.pre.item;
-        sentinel.pre = sentinel.pre.pre;
-        sentinel.pre.next = sentinel;
+        if (items.length > 16 && items.length >= size * 4) {
+            resize(items.length / 4);
+        }
+        nextLast = moveLeft(nextLast);
         size -= 1;
-        return lastItem;
+        return items[nextLast];
     }
 
     /**
@@ -142,33 +144,7 @@ public class LinkedListDeque<T> implements  Iterable<T> {
             return null;
         }
 
-        Node current = sentinel.next;
-        while (index > 0) {
-            current = current.next;
-            index -= 1;
-        }
-        return current.item;
-    }
-
-    /**
-     * Same as get, but uses recursion.
-     */
-    public T getRecursive(int index) {
-        if (index < 0 || index >= size) {
-            return null;
-        }
-
-        return getWithStarterNode(index, sentinel.next);
-    }
-
-    /**
-     * Gets the item at the given index starting from a given node.
-     */
-    private T getWithStarterNode(int index, Node node) {
-        if (index == 0) {
-            return node.item;
-        }
-        return getWithStarterNode(index - 1, node.next);
+        return items[(nextFirst + 1 + index) % items.length];
     }
 
     /**
@@ -176,11 +152,11 @@ public class LinkedListDeque<T> implements  Iterable<T> {
      * the same contents (as governed by the generic T’s equals method) in the same order.
      */
     public boolean equals(Object o) {
-        if (!(o instanceof LinkedListDeque)) {
+        if (!(o instanceof ArrayDeque)) {
             return false;
         }
-        LinkedListDeque<?> castedO = (LinkedListDeque<?>) o;
-        if (castedO.size != size) {
+        ArrayDeque<?> castedO = (ArrayDeque<?>) o;
+        if (castedO.size != this.size) {
             return false;
         }
         Iterator<?> iterator = iterator();
@@ -191,5 +167,14 @@ public class LinkedListDeque<T> implements  Iterable<T> {
             }
         }
         return true;
+    }
+
+    private int moveRight(int index) {
+        return (index + 1) % items.length;
+
+    }
+
+    private int moveLeft(int index) {
+        return (index - 1 + items.length) % items.length;
     }
 }

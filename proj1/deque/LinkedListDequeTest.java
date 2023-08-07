@@ -1,6 +1,8 @@
 package deque;
 
 import org.junit.Test;
+
+import java.util.Optional;
 import static org.junit.Assert.*;
 
 
@@ -8,7 +10,7 @@ import static org.junit.Assert.*;
 public class LinkedListDequeTest {
 
     @Test
-    /** Adds a few things to the list, checking isEmpty() and size() are correct,
+    /* Adds a few things to the list, checking isEmpty() and size() are correct,
      * finally printing the results.
      *
      * && is the "and" operation. */
@@ -34,7 +36,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
+    /* Adds an item, then removes an item, and ensures that dll is empty afterward. */
     public void addRemoveTest() {
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 		// should be empty
@@ -89,8 +91,6 @@ public class LinkedListDequeTest {
     public void emptyNullReturnTest() {
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 
-        boolean passed1 = false;
-        boolean passed2 = false;
         assertEquals("Should return null when removeFirst is called on an empty Deque,", null, lld1.removeFirst());
         assertEquals("Should return null when removeLast is called on an empty Deque,", null, lld1.removeLast());
     }
@@ -110,5 +110,49 @@ public class LinkedListDequeTest {
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
+    }
+
+    @Test
+    /* Test whether the get method works. */
+    public void getTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+
+        lld1.addFirst(3);
+        lld1.addLast(4);
+
+        assertEquals(Optional.of(3), Optional.of(lld1.get(0)));
+        assertEquals(Optional.of(4), Optional.of(lld1.get(1)));
+        assertEquals(Optional.empty(), Optional.ofNullable(lld1.get(2)));
+    }
+
+    @Test
+    /* Test whether the getRecursive method works. */
+    public void getRecursiveTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+
+        lld1.addFirst(2);
+        lld1.addFirst(1);
+        lld1.addLast(3);
+
+        assertEquals(Optional.of(1), Optional.of(lld1.getRecursive(0)));
+        assertEquals(Optional.of(2), Optional.of(lld1.getRecursive(1)));
+        assertEquals(Optional.of(3), Optional.of(lld1.getRecursive(2)));
+        assertEquals(Optional.empty(), Optional.ofNullable(lld1.get(3)));
+    }
+
+    @Test
+    public void equalsTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> lld2 = new LinkedListDeque<>();
+
+        lld1.addFirst(2);
+        lld1.addFirst(1);
+        lld1.addLast(3);
+
+        lld2.addFirst(2);
+        lld2.addFirst(1);
+        lld2.addLast(3);
+
+        assertEquals(lld1, lld2);
     }
 }
