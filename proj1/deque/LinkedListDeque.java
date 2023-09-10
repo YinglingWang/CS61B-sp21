@@ -86,8 +86,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Prints the items in the deque from first to last, separated by a space. Once all the items have been printed,
-     * print out a new line.
+     * Prints the items in the deque from first to last, separated by a space. Once all the items
+     * have been printed, print out a new line.
      */
     public void printDeque() {
         Node currentNode = sentinel.next;
@@ -127,8 +127,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists,
-     * returns null. Must not alter the deque!
+     * Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If
+     * no such item exists, returns null. Must not alter the deque!
      */
     public T get(int index) {
         if (index < 0 || index >= size) {
@@ -165,21 +165,22 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Returns whether the parameter o is equal to the Deque. o is considered equal if it is a Deque and if it contains
-     * the same contents (as governed by the generic T’s equals method) in the same order.
+     * Returns whether the parameter o is equal to the Deque. o is considered equal if it is a Deque
+     * and if it contains the same contents (as governed by the generic T’s equals method) in the
+     * same order.
      */
     public boolean equals(Object o) {
-        if (!(o instanceof LinkedListDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        LinkedListDeque<?> castedO = (LinkedListDeque<?>) o;
-        if (castedO.size != size) {
+        Deque<?> castedO = (Deque<?>) o;
+        if (castedO.size() != size) {
             return false;
         }
         Iterator<?> iterator = iterator();
         Iterator<?> oIterator = castedO.iterator();
         while (iterator.hasNext()) {
-            if (iterator.next() != oIterator.next()) {
+            if (!iterator.next().equals(oIterator.next())) {
                 return false;
             }
         }

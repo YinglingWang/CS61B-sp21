@@ -46,7 +46,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
      */
     private void resize(int capacity) {
         T[] newItems = (T[]) new Object[capacity];
-        for (int i = 0; i < size; i ++) {
+        for (int i = 0; i < size; i++) {
             newItems[i] = items[(nextFirst + 1 + i) % items.length];
         }
         items = newItems;
@@ -86,8 +86,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Prints the items in the deque from first to last, separated by a space. Once all the items have been printed,
-     * print out a new line.
+     * Prints the items in the deque from first to last, separated by a space. Once all the items have been
+     * printed, print out a new line.
      */
     public void printDeque() {
         int index = moveRight(nextFirst);
@@ -105,7 +105,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (size == 0) {
             return null;
         }
-        if (items.length > 16 && items.length >= size * 4) {
+        if (items.length > 16 && items.length > size * 4) {
             resize(items.length / 4);
         }
         nextFirst = moveRight(nextFirst);
@@ -120,7 +120,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (size == 0) {
             return null;
         }
-        if (items.length > 16 && items.length >= size * 4) {
+        if (items.length > 16 && items.length > size * 4) {
             resize(items.length / 4);
         }
         nextLast = moveLeft(nextLast);
@@ -129,8 +129,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If no such item exists,
-     * returns null. Must not alter the deque!
+     * Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth. If
+     * no such item exists, returns null. Must not alter the deque!
      */
     public T get(int index) {
         if (index < 0 || index >= size) {
@@ -141,21 +141,22 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Returns whether the parameter o is equal to the Deque. o is considered equal if it is a Deque and if it contains
-     * the same contents (as governed by the generic T’s equals method) in the same order.
+     * Returns whether the parameter o is equal to the Deque. o is considered equal if it is a Deque
+     * and if it contains the same contents (as governed by the generic T’s equals method) in the
+     * same order.
      */
     public boolean equals(Object o) {
-        if (!(o instanceof ArrayDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        ArrayDeque<?> castedO = (ArrayDeque<?>) o;
-        if (castedO.size != this.size) {
+        Deque<?> castedO = (Deque<?>) o;
+        if (castedO.size() != this.size) {
             return false;
         }
         Iterator<?> iterator = iterator();
         Iterator<?> oIterator = castedO.iterator();
         while (iterator.hasNext()) {
-            if (iterator.next() != oIterator.next()) {
+            if (!iterator.next().equals(oIterator.next())) {
                 return false;
             }
         }
