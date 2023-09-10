@@ -177,10 +177,8 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         if (castedO.size() != size) {
             return false;
         }
-        Iterator<?> iterator = iterator();
-        Iterator<?> oIterator = castedO.iterator();
-        while (iterator.hasNext()) {
-            if (!iterator.next().equals(oIterator.next())) {
+        for (int i = 0; i < size; i++) {
+            if (!(get(i).equals(castedO.get(i)))) {
                 return false;
             }
         }
