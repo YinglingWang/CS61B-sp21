@@ -86,8 +86,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     /**
-     * Prints the items in the deque from first to last, separated by a space. Once all the items have been
-     * printed, print out a new line.
+     * Prints the items in the deque from first to last, separated by a space. Once all the items
+     * have been printed, print out a new line.
      */
     public void printDeque() {
         int index = moveRight(nextFirst);
